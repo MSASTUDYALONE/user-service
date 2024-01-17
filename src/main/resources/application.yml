@@ -5,6 +5,12 @@ server:
 spring:
   application:
     name: user-service
+  h2:
+    console:
+      enabled: true # console 사용하겠다
+      settings:
+        web-allow-others: true # 외부접속허용하겠다.
+      path: /h2-console # 접속하고자 하는 웹브라우저의 h2콘솔 주소
 
 eureka:
   instance:
