@@ -11,6 +11,15 @@ spring:
       settings:
         web-allow-others: true # 외부접속허용하겠다.
       path: /h2-console # 접속하고자 하는 웹브라우저의 h2콘솔 주소
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testDB
+#    data-username: sa
+#    data-password:
+  jpa:
+    hibernate:
+      ddl-auto: create # 테이블 생성할 것인지
+    show-sql: true # 콘솔에 출력할 것인지
 
 eureka:
   instance:
