@@ -13,40 +13,41 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/")
 public class UserController {
     private Environment env;
     private UserService userService;
+    private Greeting greeting;  // # @Value
 
     @Autowired
-    public UserController(Environment env, UserService userService) {
+    public UserController(Environment env, UserService userService, Greeting greeting) {
         this.env = env;
         this.userService = userService;
+        this.greeting = greeting;
     }
 
 
 
-    @GetMapping("/health_check")
+    @GetMapping("/user-service/health_check")
     public String status() {
-        return "It's Working in User Service";
+        return String.format("It's Working in User Service on Port %s", env.getProperty("local.server.port")); // port번호 가져오기
     }
 
+//    @GetMapping("/health_check")
+//    public String status(HttpServletRequest request) {
+//        return String.format("It's Working in User Service on Port %s", request.getServerPort()); // port번호 가져오기
+//    }
 
-    @GetMapping("/welcome")
+
+    @GetMapping("/user-service/welcome")
     public String welcome() {
         return env.getProperty("greeting.message");
 //        return greeting.getMessage();
     }
 
-
-//    # @Value
-    private Greeting greeting;
-
-//    @Autowired
-//    public UserController(Greeting greeting) {
-//        this.greeting = greeting;
-//    }
 
 
     @PostMapping("/users")
