@@ -1,4 +1,4 @@
-package com.example.userservice.valueObject;
+package com.example.userservice.vo;
 
 import lombok.Data;
 
