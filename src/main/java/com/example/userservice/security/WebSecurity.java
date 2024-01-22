@@ -43,17 +43,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, env);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, env); //->인증 처리를 위해 manager를 사용
 //        authenticationFilter.setAuthenticationManager(authenticationManager()); // Spring Security에서 가져온 매니저를 가지고 인증처리 하겠다.
         // TODO #2
         return authenticationFilter;
     }
 
-
+//인증 설정을 위함함  (authenticationManager builder)
+//select pwd from users where email =?
+//db_pwd(encrypted) == input_pwd(encrypted)
 //   # 인증 Configure
 //    TODO #1
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //userdetailservice -> 사용자 이름과 비밀번호를 갖고옴(select부분을 이게 처리)
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder); // userService: 사용자 세부 정보를 얻어오도록 설정
         //UserServiceImpl의 loadUserByUsername() 뭔갈 또 해주고 있음..
     }

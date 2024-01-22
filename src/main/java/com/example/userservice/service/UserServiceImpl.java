@@ -75,6 +75,9 @@ public class UserServiceImpl implements UserService{
 
         // return : 로그인이 모두 통과되었을 때 진행, new ArrayList<>() : 권한리스트
         return new User(userEntity.getEmail(), userEntity.getEncryptedPwd(), true, true, true, true, new ArrayList<>());
+        //security user 객체
+        //모두 검색이 잘 되었다면 해당 유저를 반환하겠다
+        //마지막은 권한값
     }
 
     @Override
