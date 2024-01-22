@@ -49,15 +49,8 @@ public class UserController {
 //        return greeting.getMessage();
     }
 
-    @GetMapping("/")
-    public String welcome2() {
-        return "test";
-//        return greeting.getMessage();
-    }
 
-
-
-//    사용자 등록
+    //    사용자 등록
     @PostMapping("/users")
     public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser user) {
         ModelMapper mapper = new ModelMapper();

@@ -18,7 +18,7 @@ spring:
 #    data-password:
   jpa:
     hibernate:
-      ddl-auto: create # 테이블 생성할 것인지
+      ddl-auto: update # 테이블 생성할 것인지
     show-sql: true # 콘솔에 출력할 것인지
 
 eureka:
@@ -33,3 +33,7 @@ eureka:
 
 greeting:
   message: Welcome to the Simple E-commerce.
+
+logging:
+  level:
+    com.example.userservice: DEBUG
