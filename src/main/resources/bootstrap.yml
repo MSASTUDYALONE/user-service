@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    config:
+      uri: http://127.0.0.1:8888
+      name: ecommerce # 어플리케이션 이름 적어줬음..파일이름을 적어라..

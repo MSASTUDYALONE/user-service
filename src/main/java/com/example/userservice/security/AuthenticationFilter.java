@@ -4,6 +4,8 @@ import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -63,5 +66,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         //생성된 user객체에서 정보를 빼옴 -> 캐스팅해서 빼옴
         String userName = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
+        String token = Jwts.builder()
+                .setSubject(userDetails.getUserId()) // getUserId로 token만들 것이다
+                .setExpiration(new Date(System.currentTimeMillis() +
+                        Long.parseLong(env.getProperty("token.expiration_time")))) // 하루짜리 토큰 : 현재 시간 + 하루(application.yml에서 적어둔 expiration_time값 가져오기) (.yml에서 가져온 값은 숫자처럼 보여도 String이다.)
+                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret")) // 암호화하기 위해 시그니처 알고리즘 추가
+                .compact(); // 토큰 완성!!!!!!
+
+        response.addHeader("token", token); // Header에 token 넣기
+        response.addHeader("userId", userDetails.getUserId());
     }
 }

@@ -37,3 +37,17 @@ greeting:
 logging:
   level:
     com.example.userservice: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
+        # refresh: 현재 마이크로 서비스에 있는 컴퓨터에서 가지고 와야 할 정보를 refresh하겠다.
+
+
+
+
+#token:
+#  expiration_time: 86400000 # 하루 60초*(60분*24시간)*1000
+#  secret: user_token # 어떤 키를 가지고 생성할 것인지(임의값 넣기)

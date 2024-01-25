@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.Filter;
 
-@Configuration // 다른 빈들보다 먼저  추가
+@Configuration // 다른 빈들보다 먼저 추가
 @EnableWebSecurity // WebSecurity 용도이다
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -33,6 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); // csrf 사용하지 않겠다.
 //        http.authorizeRequests().antMatchers("/users/**").permitAll(); // authorize Requests허용할 수 있는 작업은 "/users/**"에 Match되면 PermitAll해라
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll(); // 모든 요청에 대해
         http.authorizeRequests().antMatchers("/**") // 모든 요청에 대해
                 .permitAll()
 //                .hasIpAddress("http://192.168.0.106")// 해당 IP만 받을 것이다. // TODO 내 IP넣으면 gateway안됨..
@@ -45,7 +46,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), userService, env); //->인증 처리를 위해 manager를 사용
 //        authenticationFilter.setAuthenticationManager(authenticationManager()); // Spring Security에서 가져온 매니저를 가지고 인증처리 하겠다.
-        // TODO #2
+
         return authenticationFilter;
     }
 
@@ -53,7 +54,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //select pwd from users where email =?
 //db_pwd(encrypted) == input_pwd(encrypted)
 //   # 인증 Configure
-//    TODO #1
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //userdetailservice -> 사용자 이름과 비밀번호를 갖고옴(select부분을 이게 처리)
