@@ -5,21 +5,27 @@ server:
 spring:
   application:
     name: user-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   h2:
     console:
       enabled: true # console 사용하겠다
       settings:
         web-allow-others: true # 외부접속허용하겠다.
       path: /h2-console # 접속하고자 하는 웹브라우저의 h2콘솔 주소
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testDB
+#  datasource:  # Config-service의 bootstrap.yml로 옮김..
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testDB
 #    data-username: sa
 #    data-password:
   jpa:
     hibernate:
       ddl-auto: update # 테이블 생성할 것인지
     show-sql: true # 콘솔에 출력할 것인지
+
 
 eureka:
   instance:
@@ -42,7 +48,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans
+        include: refresh, health, beans, httptrace, busrefresh
         # refresh: 현재 마이크로 서비스에 있는 컴퓨터에서 가지고 와야 할 정보를 refresh하겠다.
 
 

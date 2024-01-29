@@ -2,6 +2,7 @@ spring:
   cloud:
     config:
       uri: http://127.0.0.1:8888
-      name: ecommerce # 어플리케이션 이름 적어줬음..파일이름을 적어라..
-  profiles:
-    active: dev
+      name: user-service # 파일이름이 아니라 어플리케이션 이름을 적으면 해당 application.yml을 읽어온다.
+      # 어플리케이션 이름 적어줬음..파일이름을 적어라..
+#  profiles:
+#    active: dev
