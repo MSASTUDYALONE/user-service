@@ -10,6 +10,7 @@ spring:
     port: 5672
     username: guest
     password: guest
+
   h2:
     console:
       enabled: true # console 사용하겠다
@@ -48,7 +49,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace, busrefresh
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
         # refresh: 현재 마이크로 서비스에 있는 컴퓨터에서 가지고 와야 할 정보를 refresh하겠다.
 
 
