@@ -5,10 +5,11 @@ import com.example.userservice.dto.UserDto;
 import com.example.userservice.jpa.UserEntity;
 import com.example.userservice.jpa.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,13 +30,15 @@ public class UserServiceImpl implements UserService{
     Environment env;
     RestTemplate restTemplate;
     OrderServiceClient orderServiceClient;
+    CircuitBreakerFactory circuitBreakerFactory;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment env, RestTemplate restTemplate, OrderServiceClient orderServiceClient) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment env, RestTemplate restTemplate, OrderServiceClient orderServiceClient, CircuitBreakerFactory circuitBreakerFactory) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
         this.orderServiceClient = orderServiceClient;
+        this.circuitBreakerFactory = circuitBreakerFactory;
     }
 
     @Override
@@ -86,8 +89,15 @@ public class UserServiceImpl implements UserService{
 //        }
 
         /* ErrorDecoder */
-        List<ResponseOrder> orderList = orderServiceClient.getOrder(userId);
+//        List<ResponseOrder> orderList = orderServiceClient.getOrder(userId);
 
+//        circuitbreaker 추가 -> 원래는 order service가 오류 나면 바로 에러떳는데 200보여주고 빈 리스트 보여주게 처리한다
+
+        log.info("Before call orders microservice");
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker"); // circuitbreaker 생성
+        List<ResponseOrder> orderList = circuitbreaker.run(() -> orderServiceClient.getOrder(userId), throwable -> new ArrayList<>()); // circuitbreaker 실행
+        // run(() -> 정상작동할 경우 반환값, 문제 생겼을 경우 반환값)
+        log.info("After call orders microservice");
         userDto.setOrders(orderList);
 
         return userDto;

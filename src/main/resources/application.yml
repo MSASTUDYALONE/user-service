@@ -5,11 +5,18 @@ server:
 spring:
   application:
     name: user-service
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true #zipkin 서버 작동 O
+  sleuth:
+    sampler:
+      probability: 1.0 # 발생한 로그를 100%보여주겠다.
+
 
   h2:
     console:
@@ -17,7 +24,7 @@ spring:
       settings:
         web-allow-others: true # 외부접속허용하겠다.
       path: /h2-console # 접속하고자 하는 웹브라우저의 h2콘솔 주소
-#  datasource:  # Config-service의 bootstrap.yml로 옮김..
+#  datasource:  # Config-service의 bootstrap.yml로 옮김
 #    driver-class-name: org.h2.Driver
 #    url: jdbc:h2:mem:testDB
 #    data-username: sa
